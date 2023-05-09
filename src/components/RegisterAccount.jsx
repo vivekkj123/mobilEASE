@@ -20,19 +20,26 @@ const RegisterAccount = () => {
       <p className="Slogan text-sm lg:text-xl text-center">
         Register a account to be a <b>HERO</b>
       </p>
-      <TextField variant="outlined" label="Full Name" required />
-      <TextField variant="outlined" label="E-mail" type="email" required />
-      <TextField variant="outlined" label="Phone No." type="tel" required />
-      <TextField variant="outlined" label="Password" type="password" required />
-      <TextField
-        variant="outlined"
-        label="Confirm Password"
-        type="password"
-        required
-      />
-      <Button variant="contained" type="submit">
-        REGISTER
-      </Button>
+      <form action="" className=" flex flex-col gap-5 w-full">
+        <TextField variant="outlined" label="Full Name" required />
+        <TextField variant="outlined" label="E-mail" type="email" required />
+        <TextField variant="outlined" label="Phone No." type="tel" required />
+        <TextField
+          variant="outlined"
+          label="Password"
+          type="password"
+          required
+        />
+        <TextField
+          variant="outlined"
+          label="Confirm Password"
+          type="password"
+          required
+        />
+        <Button variant="contained" type="submit">
+          REGISTER
+        </Button>
+      </form>
     </div>
   );
 };
