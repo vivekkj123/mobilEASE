@@ -2,7 +2,13 @@ import React from "react";
 import Navbar from "/src/components/Navbar";
 import TrafficArt from "/src/assets/traffic-art.png";
 import RegisterAccount from "../components/RegisterAccount";
+import { auth } from "../utils/Firebase";
+import { Navigate } from "react-router-dom";
 const HomePage = () => {
+  const currentUser = auth.currentUser;
+  if (currentUser) {
+    return <Navigate to="/citizen-dashboard" replace />;
+  }
   return (
     <div className="HomePage">
       <Navbar />

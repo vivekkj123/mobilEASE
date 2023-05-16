@@ -2,8 +2,18 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
 import { Button } from "@mui/material";
+import { useState } from "react";
+import { handleLogin } from "../utils/FirebaseFunctions";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../utils/Firebase";
 
 const OfficialLogin = () => {
+  const [FormData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const [Err, setErr] = useState("");
   return (
     <div className="h-screen overflow-hidden">
       <Navbar />
@@ -18,19 +28,49 @@ const OfficialLogin = () => {
       justify-center
     "
         >
-          <form action="" className=" flex flex-col gap-5 w-full">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleLogin(FormData)
+                .then(async (user) => {
+                  console.log(user);
+                  if (user.official) {
+                    navigate("/official-dashboard");
+                  } else {
+                    await auth.signOut();
+                    throw new Error("Invalid user");
+                  }
+                })
+                .catch((err) => {
+                  err.message.split(": ")[1]
+                    ? setErr(err.message.split(": ")[1])
+                    : setErr(err.message);
+                });
+            }}
+            className=" flex flex-col gap-5 w-full"
+          >
             <TextField
               variant="outlined"
               label="E-mail"
               type="email"
+              value={FormData.email}
+              onChange={(e) =>
+                setFormData({ ...FormData, email: e.target.value })
+              }
               required
             />
             <TextField
               variant="outlined"
               label="Password"
               type="password"
+              value={FormData.password}
+              onChange={(e) =>
+                setFormData({ ...FormData, password: e.target.value })
+              }
               required
             />
+            <p className="text-red-600">{Err}</p>
+
             <Button variant="contained" type="submit">
               Login
             </Button>

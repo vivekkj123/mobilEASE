@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
 import { Button } from "@mui/material";
+import { handleLogin, isOfficial } from "../utils/FirebaseFunctions";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../utils/Firebase";
 
 const CitizenLogin = () => {
+  const [FormData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [Err, setErr] = useState("");
+  const navigate = useNavigate();
+
   return (
     <div className="h-screen overflow-hidden">
       <Navbar />
       <div className=" lg:px-96 px-4 h-3/4 flex flex-col justify-center">
-        <h2 className="mt-[25%] lg:mt-0 leading-normal font-bold text-center text-base lg:text-[2rem] my-8">Citizen Login</h2>
+        <h2 className="mt-[25%] lg:mt-0 leading-normal font-bold text-center text-base lg:text-[2rem] my-8">
+          Citizen Login
+        </h2>
         <div
           className="LoginBox flex flex-col gap-5 items-center 
       border-solid border-gray-500 px-3 lg:px-12 py-12 mx-4 lg:mx-12 rounded-3xl
@@ -16,19 +28,47 @@ const CitizenLogin = () => {
       justify-center
     "
         >
-          <form action="" className=" flex flex-col gap-5 w-full">
+          <form
+            action=""
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleLogin(FormData)
+                .then(async (user) => {
+                  if (!user.official) {
+                    navigate("/citizen-dashboard");
+                  } else {
+                    await auth.signOut();
+                    throw new Error("Invalid user");
+                  }
+                })
+                .catch((err) => {
+                  err.message.split(": ")[1]
+                    ? setErr(err.message.split(": ")[1])
+                    : setErr(err.message);
+                });
+            }}
+            className=" flex flex-col gap-5 w-full"
+          >
             <TextField
               variant="outlined"
               label="E-mail"
               type="email"
+              onChange={(e) =>
+                setFormData({ ...FormData, email: e.target.value })
+              }
               required
             />
             <TextField
               variant="outlined"
               label="Password"
               type="password"
+              onChange={(e) =>
+                setFormData({ ...FormData, password: e.target.value })
+              }
               required
             />
+            <p className="text-red-600">{Err}</p>
+
             <Button variant="contained" type="submit">
               Login
             </Button>

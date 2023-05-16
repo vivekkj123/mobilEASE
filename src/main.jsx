@@ -1,30 +1,37 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import HomePage from './pages/HomePage';
-import CitizenLogin from './pages/CitizenLogin';
-import OfficialLogin from './pages/OfficialLogin';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import CitizenLogin from "./pages/CitizenLogin";
+import OfficialLogin from "./pages/OfficialLogin";
+import CitizenDashboard from "./pages/CitizenDashboard";
+import OfficialDashboard from "./pages/OfficialDashboard";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage/>,
+    element: <HomePage />,
   },
   {
     path: "/citizen-login",
-    element: <CitizenLogin/>,
+    element: <CitizenLogin />,
   },
   {
     path: "/official-login",
-    element: <OfficialLogin/>,
+    element: <OfficialLogin />,
+  },
+  {
+    path: "/citizen-dashboard",
+    element: <CitizenDashboard />,
+  },
+  {
+    path: "/official-dashboard",
+    element: <OfficialDashboard />,
   },
 ]);
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </React.StrictMode>
-)
+);
