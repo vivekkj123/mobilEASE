@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import DashboardLinkButton from "../components/DashboardLinkButton";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
@@ -15,16 +15,15 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { identifyLocation } from "../utils/MiscFunctions";
-import ReactImageUploading from "react-images-uploading";
 const TextField = styled(MuiTextField)((props) => ({
   width: "80%",
-  // marginLeft: "auto",
   [`& fieldset`]: {
     borderRadius: "15px",
   },
 }));
 const ReportComplaint = () => {
-  const [Image, setImage] = useState();
+  const [Media, setMedia] = useState();
+  const [MediaPath, setMediaPath] = useState("");
   const [FormData, setFormData] = useState({
     location: {
       name: "",
@@ -35,7 +34,7 @@ const ReportComplaint = () => {
     reason: "",
     additionalInfo: "",
   });
-
+  const FileInput = useRef(null);
   return (
     <div className="overflow-x-hidden">
       <Navbar />
@@ -43,44 +42,52 @@ const ReportComplaint = () => {
         Report a Complaint
       </h2>
 
-      <ReactImageUploading
-        value={Image}
-        maxNumber={1}
-        dataURLKey="data_url"
-        onChange={(img) => {
-          setImage(img);
+      <input
+        type="file"
+        ref={FileInput}
+        className="hidden"
+        accept="image/*, video/*"
+        onChange={(e) => {
+          setMedia(e.target.files[0]);
+          setMediaPath(URL.createObjectURL(e.target.files[0]));
         }}
+        name=""
+        id=""
+      />
+      <DashboardLinkButton
+        className={`${Media ? "hidden" : "block"}`}
+        icon={faCamera}
+        name={"Upload a picture/video of incident"}
+        onClick={() => FileInput.current.click()}
+        subtitle={"Make sure that everything is clear"}
+      />
+      <div
+        className={`flex flex-col justify-center items-center mx-8 lg:mx-20 py-6 ${
+          Media ? "block" : "hidden"
+        }`}
       >
-        {({ onImageUpload, onImageUpdate }) => (
-          <>
-            <DashboardLinkButton
-              className={`${Image ? "hidden" : "block"}`}
-              icon={faCamera}
-              name={"Upload a picture/video of incident"}
-              subtitle={"Make sure that everything is clear"}
-              onClick={onImageUpload}
-            />
-            <div
-              className={`flex flex-col justify-center items-center mx-8 lg:mx-20 py-6 ${
-                Image ? "block" : "hidden"
-              }`}
-            >
-              <img
-                src={Image && Image[0].data_url}
-                alt=""
-                className="max-w-full w-auto my-6 h-96 object-scale-down"
-              />
-              <Button
-                onClick={() => onImageUpdate(0)}
-                hidden={Image ? false : true}
-                variant="outlined"
-              >
-                Change Image
-              </Button>
-            </div>
-          </>
-        )}
-      </ReactImageUploading>
+        <img
+          src={Media && Media.type.split("/")[0] === "image" ? MediaPath : null}
+          alt=""
+          className={`max-w-full w-auto my-6 h-96 object-scale-down
+          ${Media && Media.type.split("/")[0] == "image" ? "block" : "hidden"}
+          `}
+        />
+        <video
+          controls
+          src={Media && Media.type.split("/")[0] === "video" ? MediaPath : null}
+          className={`max-w-full w-auto my-6 h-96 object-scale-down
+          ${Media && Media.type.split("/")[0] == "video" ? "block" : "hidden"}
+          `}
+        ></video>
+        <Button
+          onClick={() => FileInput.current.click()}
+          hidden={Media ? false : true}
+          variant="outlined"
+        >
+          Change Image
+        </Button>
+      </div>
       <form>
         <Box marginLeft={10}>
           <TextField
