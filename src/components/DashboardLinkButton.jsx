@@ -1,8 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { InputRounded } from "@mui/icons-material";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const DashboardLinkButton = ({ name, icon, link, onClick, className }) => {
+const DashboardLinkButton = ({
+  name,
+  icon,
+  link,
+  onClick,
+  className,
+  subtitle,
+}) => {
   return (
     <Link
       className=""
@@ -20,6 +28,14 @@ const DashboardLinkButton = ({ name, icon, link, onClick, className }) => {
       >
         <FontAwesomeIcon size={"2x"} icon={icon} />
         <p className="mt-6 text-center">{name}</p>
+        <p
+          className={`text-center text-xs lg:text-base ${
+            !subtitle ? "hidden" : "block"
+          }`}
+        >
+          ({subtitle})
+        </p>
+        
       </div>
     </Link>
   );

@@ -7,6 +7,7 @@ import CitizenLogin from "./pages/CitizenLogin";
 import OfficialLogin from "./pages/OfficialLogin";
 import CitizenDashboard from "./pages/CitizenDashboard";
 import OfficialDashboard from "./pages/OfficialDashboard";
+import ReportComplaint from "./pages/ReportComplaint";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/official-dashboard",
     element: <OfficialDashboard />,
+  },
+  {
+    path: "/report",
+    element: <ReportComplaint />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
