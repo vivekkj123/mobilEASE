@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import DashboardLinkButton from "../components/DashboardLinkButton";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
@@ -6,6 +6,7 @@ import MuiTextField from "@mui/material/TextField";
 import styled from "@emotion/styled";
 import { LocationSearching } from "@mui/icons-material";
 import {
+  Alert,
   Box,
   Button,
   ButtonBase,
@@ -15,6 +16,12 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { identifyLocation } from "../utils/MiscFunctions";
+import { auth } from "../utils/Firebase";
+import { createComplaint, isOfficial } from "../utils/FirebaseFunctions";
+import { useNavigate } from "react-router-dom";
+import SpinnerModal from "../components/SpinnerModal";
+import { ToastContainer, toast } from "react-toastify";
+
 const TextField = styled(MuiTextField)((props) => ({
   width: "80%",
   [`& fieldset`]: {
@@ -33,62 +40,110 @@ const ReportComplaint = () => {
     mediaPath: "",
     reason: "",
     additionalInfo: "",
+    reportedBy: "",
+    timestamp: "",
   });
+  const [LoaderVisibile, setLoaderVisibile] = useState(false);
   const FileInput = useRef(null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (!user || !isOfficial(user.uid)) {
+        return navigate("/");
+      }
+      setFormData({ ...FormData, reportedBy: user.uid });
+    });
+  }, []);
   return (
     <div className="overflow-x-hidden">
+      <SpinnerModal visible={LoaderVisibile} />
       <Navbar />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <h2 className=" lg:mt-10 leading-normal font-bold text-center text-xl lg:text-[2rem] my-6 lg:text-left lg:mx-20">
         Report a Complaint
       </h2>
 
-      <input
-        type="file"
-        ref={FileInput}
-        className="hidden"
-        accept="image/*, video/*"
-        onChange={(e) => {
-          setMedia(e.target.files[0]);
-          setMediaPath(URL.createObjectURL(e.target.files[0]));
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setLoaderVisibile(true);
+          createComplaint(FormData, Media)
+            .then(() => {
+              toast.success("Complaint Reported Succesfully");
+              setTimeout(() => {
+                navigate("/citizen-dashboard");
+              }, 3000);
+            })
+            .finally(() => {
+              setLoaderVisibile(false);
+            })
+            .catch((err) => {
+              toast.error(err.message);
+            });
         }}
-        name=""
-        id=""
-      />
-      <DashboardLinkButton
-        className={`${Media ? "hidden" : "block"}`}
-        icon={faCamera}
-        name={"Upload a picture/video of incident"}
-        onClick={() => FileInput.current.click()}
-        subtitle={"Make sure that everything is clear"}
-      />
-      <div
-        className={`flex flex-col justify-center items-center mx-8 lg:mx-20 py-6 ${
-          Media ? "block" : "hidden"
-        }`}
       >
-        <img
-          src={Media && Media.type.split("/")[0] === "image" ? MediaPath : null}
-          alt=""
-          className={`max-w-full w-auto my-6 h-96 object-scale-down
+        <input
+          required
+          type="file"
+          ref={FileInput}
+          className="opacity-0"
+          accept="image/*, video/*"
+          onChange={(e) => {
+            setMedia(e.target.files[0]);
+            setMediaPath(URL.createObjectURL(e.target.files[0]));
+          }}
+          name=""
+          id=""
+        />
+        <DashboardLinkButton
+          className={`${Media ? "hidden" : "block"}`}
+          icon={faCamera}
+          name={"Upload a picture/video of incident"}
+          onClick={() => FileInput.current.click()}
+          subtitle={"Make sure that everything is clear"}
+        />
+        <div
+          className={`flex flex-col justify-center items-center mx-8 lg:mx-20 py-6 ${
+            Media ? "block" : "hidden"
+          }`}
+        >
+          <img
+            src={
+              Media && Media.type.split("/")[0] === "image" ? MediaPath : null
+            }
+            alt=""
+            className={`max-w-full w-auto my-6 h-96 object-scale-down
           ${Media && Media.type.split("/")[0] == "image" ? "block" : "hidden"}
           `}
-        />
-        <video
-          controls
-          src={Media && Media.type.split("/")[0] === "video" ? MediaPath : null}
-          className={`max-w-full w-auto my-6 h-96 object-scale-down
+          />
+          <video
+            controls
+            src={
+              Media && Media.type.split("/")[0] === "video" ? MediaPath : null
+            }
+            className={`max-w-full w-auto my-6 h-96 object-scale-down
           ${Media && Media.type.split("/")[0] == "video" ? "block" : "hidden"}
           `}
-        ></video>
-        <Button
-          onClick={() => FileInput.current.click()}
-          hidden={Media ? false : true}
-          variant="outlined"
-        >
-          Change Image
-        </Button>
-      </div>
-      <form>
+          ></video>
+          <Button
+            onClick={() => FileInput.current.click()}
+            hidden={Media ? false : true}
+            variant="outlined"
+          >
+            Change Image
+          </Button>
+        </div>
         <Box marginLeft={10}>
           <TextField
             variant="outlined"

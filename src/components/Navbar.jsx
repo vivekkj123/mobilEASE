@@ -29,7 +29,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    setUser(auth.currentUser);
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
   }, []);
   return (
     <>

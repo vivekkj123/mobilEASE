@@ -1,14 +1,14 @@
 import {
   browserLocalPersistence,
   createUserWithEmailAndPassword,
-  getAuth,
   setPersistence,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { auth, db } from "./Firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db, storage } from "./Firebase";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { userTypes } from "./enums";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const handleRegistration = async (formData) => {
   try {
@@ -46,7 +46,6 @@ export const isOfficial = async (userId) => {
 
 export const handleLogin = async (formData) => {
   try {
-    const auth = getAuth();
     await setPersistence(auth, browserLocalPersistence);
     const userCredential = await signInWithEmailAndPassword(
       auth,
@@ -56,6 +55,20 @@ export const handleLogin = async (formData) => {
     const user = userCredential.user;
     const isOfficialUser = await isOfficial(user.uid);
     return { ...user, official: isOfficialUser };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const createComplaint = async (formData, media) => {
+  const timestamp = Date.now();
+  const fileName = `${timestamp}`;
+  const fileRef = ref(storage, `${timestamp}.${media.name.split(".")[1]}`);
+  try {
+    await uploadBytes(fileRef, media);
+    const fileLink = await getDownloadURL(fileRef);
+    const updatedFormData = { ...formData, timestamp, mediaPath: fileLink };
+    await addDoc(collection(db, "complaints"), updatedFormData);
   } catch (error) {
     throw new Error(error.message);
   }
