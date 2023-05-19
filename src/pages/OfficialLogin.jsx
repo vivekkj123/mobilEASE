@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
 import { Button } from "@mui/material";
@@ -14,6 +14,13 @@ const OfficialLogin = () => {
   });
   const navigate = useNavigate();
   const [Err, setErr] = useState("");
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        return navigate("/official-dashboard");
+      }
+    });
+  }, []);
   return (
     <div className="h-screen overflow-hidden">
       <Navbar />

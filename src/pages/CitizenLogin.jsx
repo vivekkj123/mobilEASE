@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
 import { Button } from "@mui/material";
-import { handleLogin, isOfficial } from "../utils/FirebaseFunctions";
+import { handleLogin } from "../utils/FirebaseFunctions";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/Firebase";
 
@@ -13,7 +13,13 @@ const CitizenLogin = () => {
   });
   const [Err, setErr] = useState("");
   const navigate = useNavigate();
-
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        return navigate("/citizen-dashboard");
+      }
+    });
+  }, []);
   return (
     <div className="h-screen overflow-hidden">
       <Navbar />
