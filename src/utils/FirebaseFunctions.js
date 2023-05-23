@@ -6,7 +6,16 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth, db, storage } from "./Firebase";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { userTypes } from "./enums";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
@@ -62,8 +71,8 @@ export const handleLogin = async (formData) => {
 
 export const createComplaint = async (formData, media) => {
   const timestamp = Date.now();
-  const fileName = `${timestamp}`;
-  const fileRef = ref(storage, `${timestamp}.${media.name.split(".")[1]}`);
+  const fileName = `complaints/${timestamp}.${media.name.split(".")[1]}`;
+  const fileRef = ref(storage, fileName);
   try {
     await uploadBytes(fileRef, media);
     const fileLink = await getDownloadURL(fileRef);
@@ -71,5 +80,22 @@ export const createComplaint = async (formData, media) => {
     await addDoc(collection(db, "complaints"), updatedFormData);
   } catch (error) {
     throw new Error(error.message);
+  }
+};
+
+export const fetchComplaintsByUser = async (uid) => {
+  try {
+    const complaintsRef = collection(db, "complaints");
+    const q = query(complaintsRef, where("reportedBy", "==", uid));
+    const querySnapshot = await getDocs(q);
+    const complaints = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log(complaints);
+    return complaints;
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    throw error;
   }
 };

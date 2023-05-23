@@ -1,9 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchComplaintsByUser, isOfficial } from "../utils/FirebaseFunctions";
+import { auth } from "../utils/Firebase";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { Statuses, statusColors } from "../utils/enums";
+import ComplaintsCard from "./ComplaintsCard";
 
 const ReportedComplaints = () => {
+  const [Complaints, setComplaints] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (!user || !isOfficial(user.uid)) {
+        return navigate("/citizen-login");
+      }
+      fetchComplaintsByUser(user.uid)
+        .then((complaints) => {
+          setComplaints(complaints);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    });
+  }, []);
   return (
-    <div className="border shadow-[3px_4px_4px_rgba(0,0,0,0.26)] rounded-lg border-solid border-black w-[28rem] flex flex-col justify-center items-center h-96">
-      ReportedComplaints
+    <div className="lg:border lg:shadow-[3px_4px_4px_rgba(0,0,0,0.26)] rounded-lg lg:border-solid lg:border-black w-full flex flex-col items-center lg:h-[28rem] py-2">
+      <h3 className="font-bold my-2">Complaints Reported by You</h3>
+      <div className="container px-4 overflow-y-auto">
+        {Complaints.length === 0 ? (
+          <h2>No Complaints Found</h2>
+        ) : (
+          Complaints &&
+          Complaints.map((complaint) => {
+            return <ComplaintsCard key={complaint.id} complaint={complaint} />;
+          })
+        )}
+      </div>
     </div>
   );
 };

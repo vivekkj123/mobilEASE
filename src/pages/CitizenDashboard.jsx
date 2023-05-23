@@ -10,13 +10,19 @@ import {
   faTrafficLight,
 } from "@fortawesome/free-solid-svg-icons";
 import ReportedComplaints from "../components/ReportedComplaints";
+import { useEffect } from "react";
+import { isOfficial } from "../utils/FirebaseFunctions";
 
 const CitizenDashboard = () => {
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    return <Navigate to="/citizen-login" replace />;
-  }
   const navigate = useNavigate();
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (!user || !isOfficial(user.uid)) {
+        return navigate("/citizen-login");
+      }
+    });
+  }, []);
+  
   const handleLogout = () => {
     auth.signOut();
     navigate("/");
@@ -29,7 +35,7 @@ const CitizenDashboard = () => {
       <h2 className=" lg:mt-10 leading-normal font-bold text-center text-xl lg:text-[2rem] my-8 lg:text-left lg:mx-20">
         Dashboard
       </h2>
-      <div className="grid lg:grid-cols-[1fr_0.5fr]">
+      <div className="grid lg:grid-cols-[0.8fr_0.6fr] mx-10">
         <div>
           <DashboardLinkButton
             icon={faEdit}

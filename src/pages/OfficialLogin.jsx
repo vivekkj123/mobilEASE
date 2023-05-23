@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { handleLogin } from "../utils/FirebaseFunctions";
+import { handleLogin, isOfficial } from "../utils/FirebaseFunctions";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/Firebase";
 
@@ -16,7 +16,7 @@ const OfficialLogin = () => {
   const [Err, setErr] = useState("");
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) {
+      if (user && !isOfficial(user.uid)) {
         return navigate("/official-dashboard");
       }
     });

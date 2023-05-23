@@ -27,7 +27,6 @@ const Navbar = () => {
     setUser(null);
     navigate("/");
   };
-
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {

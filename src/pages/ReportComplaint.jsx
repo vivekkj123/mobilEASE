@@ -21,6 +21,7 @@ import { createComplaint, isOfficial } from "../utils/FirebaseFunctions";
 import { useNavigate } from "react-router-dom";
 import SpinnerModal from "../components/SpinnerModal";
 import { ToastContainer, toast } from "react-toastify";
+import { Statuses } from "../utils/enums";
 
 const TextField = styled(MuiTextField)((props) => ({
   width: "80%",
@@ -42,6 +43,9 @@ const ReportComplaint = () => {
     additionalInfo: "",
     reportedBy: "",
     timestamp: "",
+    status: Statuses.inProgress,
+    mediaType: "",
+    comments: [],
   });
   const [LoaderVisibile, setLoaderVisibile] = useState(false);
   const FileInput = useRef(null);
@@ -101,13 +105,17 @@ const ReportComplaint = () => {
           accept="image/*, video/*"
           onChange={(e) => {
             setMedia(e.target.files[0]);
+            setFormData({
+              ...FormData,
+              mediaType: e.target.files[0].type.split("/")[0],
+            });
             setMediaPath(URL.createObjectURL(e.target.files[0]));
           }}
           name=""
           id=""
         />
         <DashboardLinkButton
-          className={`${Media ? "hidden" : "block"}`}
+          className={`${Media ? "hidden" : "block"} mx-[8vw]` }
           icon={faCamera}
           name={"Upload a picture/video of incident"}
           onClick={() => FileInput.current.click()}
@@ -119,21 +127,17 @@ const ReportComplaint = () => {
           }`}
         >
           <img
-            src={
-              Media && Media.type.split("/")[0] === "image" ? MediaPath : null
-            }
+            src={Media && FormData.mediaType === "image" ? MediaPath : null}
             alt=""
             className={`max-w-full w-auto my-6 h-96 object-scale-down
-          ${Media && Media.type.split("/")[0] == "image" ? "block" : "hidden"}
+          ${Media && FormData.mediaType == "image" ? "block" : "hidden"}
           `}
           />
           <video
             controls
-            src={
-              Media && Media.type.split("/")[0] === "video" ? MediaPath : null
-            }
+            src={Media && FormData.mediaType === "video" ? MediaPath : null}
             className={`max-w-full w-auto my-6 h-96 object-scale-down
-          ${Media && Media.type.split("/")[0] == "video" ? "block" : "hidden"}
+          ${Media && FormData.mediaType == "video" ? "block" : "hidden"}
           `}
           ></video>
           <Button
@@ -144,7 +148,7 @@ const ReportComplaint = () => {
             Change Image
           </Button>
         </div>
-        <Box marginLeft={10}>
+        <Box ml={'8vw'}>
           <TextField
             variant="outlined"
             label="Location"

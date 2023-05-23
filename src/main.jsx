@@ -9,6 +9,8 @@ import OfficialLogin from "./pages/OfficialLogin";
 import CitizenDashboard from "./pages/CitizenDashboard";
 import OfficialDashboard from "./pages/OfficialDashboard";
 import ReportComplaint from "./pages/ReportComplaint";
+import ReportedComplaints from "./components/ReportedComplaints";
+import Navbar from "./components/Navbar";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,15 @@ const router = createBrowserRouter([
   {
     path: "/report",
     element: <ReportComplaint />,
+  },
+  {
+    path: "/track-complaints",
+    element: (
+      <>
+        <Navbar />
+        <ReportedComplaints />
+      </>
+    ),
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

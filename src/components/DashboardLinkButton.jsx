@@ -16,12 +16,12 @@ const DashboardLinkButton = ({
       className=""
       to={link}
       onClick={() => {
-        onClick();
+        onClick ? onClick() : null;
       }}
     >
       <div
         className={
-          `DashboardLinkButton  border shadow-[3px_4px_4px_rgba(0,0,0,0.26)] rounded-lg border-solid border-black w-100 flex flex-col justify-center items-center px-10 py-10 mx-20 my-5 
+          `DashboardLinkButton  border shadow-[3px_4px_4px_rgba(0,0,0,0.26)] rounded-lg border-solid border-black w-100 flex flex-col justify-center items-center px-10 py-10 mx-10 my-5 
       lg:h-96 lg:text-xl
       ` + className
         }
@@ -35,7 +35,6 @@ const DashboardLinkButton = ({
         >
           ({subtitle})
         </p>
-        
       </div>
     </Link>
   );
