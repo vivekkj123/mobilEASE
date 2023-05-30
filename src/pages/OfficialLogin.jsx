@@ -16,7 +16,7 @@ const OfficialLogin = () => {
   const [Err, setErr] = useState("");
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user && !isOfficial(user.uid)) {
+      if (user && isOfficial(user.uid)) {
         return navigate("/official-dashboard");
       }
     });

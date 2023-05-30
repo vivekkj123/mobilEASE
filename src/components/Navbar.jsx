@@ -8,6 +8,7 @@ import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import CitizenLogin from "../pages/CitizenLogin";
 import { auth } from "../utils/Firebase";
+import { isOfficial } from "../utils/FirebaseFunctions";
 
 export const Button = styled(MuiButton)((props) => ({
   borderRadius: "25px",
@@ -21,6 +22,7 @@ export const Button = styled(MuiButton)((props) => ({
 const Navbar = () => {
   const [Visible, setVisible] = useState(false);
   const [User, setUser] = useState(null);
+  const [Official, setOfficial] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
     auth.signOut();
@@ -32,6 +34,9 @@ const Navbar = () => {
       if (user) {
         setUser(user);
       }
+      isOfficial(user.uid).then((res) => {
+        setOfficial(res);
+      });
     });
   }, []);
   return (
@@ -47,7 +52,7 @@ const Navbar = () => {
           <div className="ButtonGroup gap-8 hidden lg:flex">
             <Button
               component={Link}
-              to={User.official ? "/official-dashboard" : "/citizen-dashboard"}
+              to={Official ? "/official-dashboard" : "/citizen-dashboard"}
               variant="outlined"
             >
               Dashboard
@@ -84,9 +89,7 @@ const Navbar = () => {
           {User ? (
             <>
               <Link
-                to={
-                  User.official ? "/official-dashboard" : "/citizen-dashboard"
-                }
+                to={Official ? "/official-dashboard" : "/citizen-dashboard"}
               >
                 Dashboard
               </Link>

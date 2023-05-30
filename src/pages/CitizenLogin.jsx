@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
 import { Button } from "@mui/material";
-import { handleLogin } from "../utils/FirebaseFunctions";
+import { handleLogin, isOfficial } from "../utils/FirebaseFunctions";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/Firebase";
 
@@ -15,7 +15,7 @@ const CitizenLogin = () => {
   const navigate = useNavigate();
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) {
+      if (user && !isOfficial(user.uid)) {
         return navigate("/citizen-dashboard");
       }
     });

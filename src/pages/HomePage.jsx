@@ -4,12 +4,15 @@ import TrafficArt from "/src/assets/traffic-art.png";
 import RegisterAccount from "../components/RegisterAccount";
 import { auth } from "../utils/Firebase";
 import { useNavigate } from "react-router-dom";
+import { isOfficial } from "../utils/FirebaseFunctions";
 const HomePage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) {
+      if (user && !isOfficial(user.uid)) {
         return navigate("/citizen-dashboard");
+      } else if (user && isOfficial(user.uid)) {
+        return navigate("/official-dashboard");
       }
     });
   }, []);

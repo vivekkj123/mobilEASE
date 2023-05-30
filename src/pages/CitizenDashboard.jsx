@@ -17,12 +17,18 @@ const CitizenDashboard = () => {
   const navigate = useNavigate();
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (!user || !isOfficial(user.uid)) {
+      if (!user) {
         return navigate("/citizen-login");
+      } else {
+        isOfficial(user.uid).then((res) => {
+          if (res) {
+            navigate("/official-dashboard");
+          }
+        });
       }
     });
   }, []);
-  
+
   const handleLogout = () => {
     auth.signOut();
     navigate("/");

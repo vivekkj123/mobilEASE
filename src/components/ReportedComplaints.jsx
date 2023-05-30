@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { fetchComplaintsByUser, isOfficial } from "../utils/FirebaseFunctions";
 import { auth } from "../utils/Firebase";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { Statuses, statusColors } from "../utils/enums";
 import ComplaintsCard from "./ComplaintsCard";
 
 const ReportedComplaints = () => {

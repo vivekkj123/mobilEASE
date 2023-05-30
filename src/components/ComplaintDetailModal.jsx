@@ -1,6 +1,5 @@
 import { faClockFour } from "@fortawesome/free-regular-svg-icons";
 import {
-  faClock,
   faClose,
   faMapMarkerAlt,
   faUser,
@@ -9,14 +8,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  Typography,
+  IconButton,
+  TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Statuses, statusColors } from "../utils/enums";
+import { auth } from "../utils/Firebase";
+import {
+  addComment,
+  fetchUserById,
+  isOfficial,
+} from "../utils/FirebaseFunctions";
+import { Send } from "@mui/icons-material";
+import CommentsTile from "./CommentsTile";
 
 const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
+  console.log(complaint);
+  const [Official, setOfficial] = useState(false);
+  const [CommentBoxDisabled, setCommentBoxDisabled] = useState(true);
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user && isOfficial(user.uid)) {
+        setOfficial(true);
+      }
+    });
+  }, []);
   let TimeStamp = new Date(complaint.timestamp);
   let date = TimeStamp.toLocaleDateString();
   let time = TimeStamp.toLocaleTimeString("en-US", {
@@ -27,6 +44,7 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
   let StatusColorEnum = Object.keys(Statuses).find(
     (key) => Statuses[key] === complaint.status
   );
+  const [CommentFValue, setCommentFValue] = useState("");
   return (
     <div className="">
       <DialogTitle className="flex justify-between">
@@ -48,10 +66,11 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
               <FontAwesomeIcon icon={faMapMarkerAlt} />
               <p>{complaint.location.name}</p>
             </div>
-            <span className="w-30 text-center bg-green-800 rounded-xl font-bold text-white h-6 px-4"
-            style={{
-              backgroundColor: statusColors[StatusColorEnum],
-            }}
+            <span
+              className="w-30 text-center rounded-xl font-bold flex items-center text-white h-12 lg:h-6 px-4"
+              style={{
+                backgroundColor: statusColors[StatusColorEnum],
+              }}
             >
               {complaint.status}
             </span>
@@ -76,22 +95,37 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
           )}
           <h2 className="text-lg font-bold my-4">Comments</h2>
           <div>
-            <div className="flex justify-between w-full">
-              <div className="h-10 w-10 flex justify-center items-center bg-red-500 rounded-full">
-                <FontAwesomeIcon icon={faUser} color="#fff" size="1x" />
-              </div>
-              <div className="font-semibold flex px-4 items-center w-full justify-between">
-                <p>John Doe</p>
-                <p>12 Jan 2023, 06:30 PM</p>
-              </div>
-              
-            </div>
-            <p className="ml-12">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-              itaque consequuntur incidunt quas facilis recusandae, impedit
-              obcaecati consectetur nemo quaerat doloribus laudantium facere
-              velit quibusdam corrupti nostrum numquam vel ipsam!
-            </p>
+            {complaint.comments &&
+              complaint.comments.map((comment) => (
+                <CommentsTile key={comment.id} comment={comment} />
+              ))}
+          </div>
+          {Official ? <h2>HELLO</h2> : <h2>Not a Admin</h2>}
+          <div className="my-4 flex  gap-4 items-center">
+            <TextField
+              fullWidth
+              value={CommentFValue}
+              onChange={(e) => {
+                setCommentFValue(e.target.value);
+                if (e.target.value == "") {
+                  setCommentBoxDisabled(true);
+                } else {
+                  setCommentBoxDisabled(false);
+                }
+              }}
+              variant="outlined"
+              label="Comment"
+            />
+            <IconButton
+              className="h-10 w-10 shadow-xl border rounded-full flex items-center justify-center"
+              onClick={() => {
+                addComment(complaint.id, CommentFValue);
+                // setDialogOpen(false);
+              }}
+              disabled={CommentBoxDisabled}
+            >
+              <Send />
+            </IconButton>
           </div>
         </div>
       </DialogContent>
