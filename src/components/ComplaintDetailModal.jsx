@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  Button,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -19,6 +20,8 @@ import {
   addComment,
   fetchUserById,
   isOfficial,
+  markAsRejected,
+  markAsSolved,
 } from "../utils/FirebaseFunctions";
 import { Send } from "@mui/icons-material";
 import CommentsTile from "./CommentsTile";
@@ -95,13 +98,19 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
           )}
           <h2 className="text-lg font-bold my-4">Comments</h2>
           <div>
-            {complaint.comments &&
+            {complaint.comments && complaint.comments.length === 0 ? (
+              <p className="text-center">No Comments</p>
+            ) : (
               complaint.comments.map((comment) => (
                 <CommentsTile key={comment.id} comment={comment} />
-              ))}
+              ))
+            )}
           </div>
-          {Official ? <h2>HELLO</h2> : <h2>Not a Admin</h2>}
-          <div className="my-4 flex  gap-4 items-center">
+          <div
+            className={`${
+              complaint.status !== Statuses.inProgress ? "hidden" : "block"
+            } my-4 flex  gap-4 items-center`}
+          >
             <TextField
               fullWidth
               value={CommentFValue}
@@ -114,12 +123,13 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
                 }
               }}
               variant="outlined"
-              label="Comment"
+              label="Add your comment"
             />
             <IconButton
               className="h-10 w-10 shadow-xl border rounded-full flex items-center justify-center"
               onClick={() => {
                 addComment(complaint.id, CommentFValue);
+                setCommentFValue("");
                 // setDialogOpen(false);
               }}
               disabled={CommentBoxDisabled}
@@ -129,6 +139,31 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
           </div>
         </div>
       </DialogContent>
+
+      <DialogActions>
+        {Official && complaint.status === Statuses.inProgress ? (
+          <>
+            <Button color="error" variant="outlined"
+              onClick={async () => {
+                await markAsRejected(complaint.id);
+                setDialogOpen(false);
+              }}
+            >
+              Mark as Rejected
+            </Button>
+            <Button
+              onClick={async () => {
+                await markAsSolved(complaint.id);
+                setDialogOpen(false);
+              }}
+              color="success"
+              variant="contained"
+            >
+              Mark as Solved
+            </Button>
+          </>
+        ) : null}
+      </DialogActions>
     </div>
   );
 };

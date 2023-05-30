@@ -19,8 +19,8 @@ import {
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { userTypes } from "./enums";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { Statuses, userTypes } from "./enums";
 
 export const handleRegistration = async (formData) => {
   try {
@@ -30,9 +30,7 @@ export const handleRegistration = async (formData) => {
       formData.password
     );
     const user = userCredential.user;
-    await updateProfile(user, {
-      displayName: formData.name,
-    });
+    await updateProfile(user, { displayName: formData.name });
     await setDoc(doc(db, "users", user.uid), {
       name: formData.name,
       email: formData.email,
@@ -44,6 +42,7 @@ export const handleRegistration = async (formData) => {
     throw new Error(error.message);
   }
 };
+
 export const isOfficial = async (userId) => {
   const userDocRef = doc(db, "users", userId);
   const userDocSnapshot = await getDoc(userDocRef);
@@ -86,28 +85,42 @@ export const createComplaint = async (formData, media) => {
   }
 };
 
-export const fetchComplaintsByUser = async (uid) => {
-  try {
-    const complaintsRef = collection(db, "complaints");
-    const q = query(complaintsRef, where("reportedBy", "==", uid));
-    const querySnapshot = await getDocs(q);
-    const complaints = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    console.log(complaints);
-    return complaints;
-  } catch (error) {
-    console.error("Error fetching complaints:", error);
-    throw error;
-  }
+export const fetchComplaintsByUser = (uid, handleComplaintsUpdate) => {
+  const complaintsRef = collection(db, "complaints");
+  const q = query(complaintsRef, where("reportedBy", "==", uid));
+
+  return onSnapshot(q, async (querySnapshot) => {
+    const complaints = [];
+
+    for (const complaintDoc of querySnapshot.docs) {
+      const complaintData = complaintDoc.data();
+      const complaintId = complaintDoc.id;
+
+      const commentsRef = collection(db, "complaints", complaintId, "comments");
+      const commentsQuerySnapshot = await getDocs(commentsRef);
+      const comments = commentsQuerySnapshot.docs.map((commentDoc) => ({
+        id: commentDoc.id,
+        ...commentDoc.data(),
+      }));
+
+      const complaintWithComments = {
+        id: complaintId,
+        ...complaintData,
+        comments: comments,
+      };
+
+      complaints.push(complaintWithComments);
+    }
+
+    handleComplaintsUpdate(complaints);
+  });
 };
 
 export const findComplaintAuthor = async (uid) => {
   try {
-    const UsersRef = collection(db, "users");
-    const q = query(UsersRef, where("reportedBy", "==", uid));
-    const querySnapshot = await getDoc(q);
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("reportedBy", "==", uid));
+    const querySnapshot = await getDocs(q);
     return querySnapshot.data();
   } catch (error) {
     console.error("Error fetching complaints:", error);
@@ -118,7 +131,7 @@ export const findComplaintAuthor = async (uid) => {
 export const fetchComplaints = (handleComplaintsUpdate) => {
   const complaintsCollection = collection(db, "complaints");
 
-  const unsubscribe = onSnapshot(complaintsCollection, async (complaintsSnapshot) => {
+  return onSnapshot(complaintsCollection, async (complaintsSnapshot) => {
     const updatedComplaints = [];
 
     for (const complaintDoc of complaintsSnapshot.docs) {
@@ -136,40 +149,49 @@ export const fetchComplaints = (handleComplaintsUpdate) => {
         comments: [],
       };
 
-      const commentsCollection = collection(db, "complaints", complaintId, "comments");
-      const commentsUnsubscribe = onSnapshot(commentsCollection, (commentsSnapshot) => {
-        const comments = commentsSnapshot.docs.map((commentDoc) => {
-          const commentData = commentDoc.data();
-          const commentId = commentDoc.id;
+      const commentsCollection = collection(
+        db,
+        "complaints",
+        complaintId,
+        "comments"
+      );
+      const commentsUnsubscribe = onSnapshot(
+        commentsCollection,
+        (commentsSnapshot) => {
+          const comments = commentsSnapshot.docs.map((commentDoc) => {
+            const commentData = commentDoc.data();
+            const commentId = commentDoc.id;
 
-          return {
-            id: commentId,
-            author: commentData.author,
-            comment: commentData.comment,
-            timestamp: commentData.timestamp,
-          };
-        });
+            return {
+              id: commentId,
+              author: commentData.author,
+              comment: commentData.comment,
+              timestamp: commentData.timestamp,
+            };
+          });
 
-        complaintWithAuthor.comments = comments;
-        handleComplaintsUpdate([...updatedComplaints]); // Create a new array with updated complaints
-      });
+          complaintWithAuthor.comments = comments;
+          handleComplaintsUpdate([...updatedComplaints]);
+        }
+      );
 
       updatedComplaints.push(complaintWithAuthor);
-
-      // Add the commentsUnsubscribe function to the complaintWithAuthor object
       complaintWithAuthor.commentsUnsubscribe = commentsUnsubscribe;
     }
 
-    handleComplaintsUpdate([...updatedComplaints]); // Create a new array with all complaints
+    handleComplaintsUpdate([...updatedComplaints]);
   });
-
-  return unsubscribe;
 };
 
 export const addComment = async (complaintID, comment) => {
   try {
     const user = auth.currentUser;
-    const commentsCollection = collection(db, "complaints", complaintID, "comments");
+    const commentsCollection = collection(
+      db,
+      "complaints",
+      complaintID,
+      "comments"
+    );
     const newComment = {
       author: user.uid,
       comment: comment,
@@ -190,5 +212,24 @@ export const fetchUserById = async (uid) => {
   } catch (error) {
     console.error("Error fetching complaints:", error);
     throw error;
+  }
+};
+
+export const markAsSolved = async (complaintID) => {
+  try {
+    const complaint = doc(db, "complaints", complaintID);
+
+    await updateDoc(complaint, { status: Statuses.solved });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+export const markAsRejected = async (complaintID) => {
+  try {
+    const complaint = doc(db, "complaints", complaintID);
+
+    await updateDoc(complaint, { status: Statuses.rejected });
+  } catch (error) {
+    throw new Error(error.message);
   }
 };

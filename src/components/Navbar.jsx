@@ -33,10 +33,10 @@ const Navbar = () => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
+        isOfficial(user.uid).then((res) => {
+          setOfficial(res);
+        });
       }
-      isOfficial(user.uid).then((res) => {
-        setOfficial(res);
-      });
     });
   }, []);
   return (

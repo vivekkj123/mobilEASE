@@ -45,7 +45,6 @@ const ReportComplaint = () => {
     timestamp: "",
     status: Statuses.inProgress,
     mediaType: "",
-    comments: [],
   });
   const [LoaderVisibile, setLoaderVisibile] = useState(false);
   const FileInput = useRef(null);

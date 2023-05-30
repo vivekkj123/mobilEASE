@@ -22,7 +22,8 @@ const CitizenDashboard = () => {
       } else {
         isOfficial(user.uid).then((res) => {
           if (res) {
-            navigate("/official-dashboard");
+            auth.signOut()
+            navigate("/official-login");
           }
         });
       }

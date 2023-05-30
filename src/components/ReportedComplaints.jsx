@@ -12,15 +12,20 @@ const ReportedComplaints = () => {
       if (!user || !isOfficial(user.uid)) {
         return navigate("/citizen-login");
       }
-      fetchComplaintsByUser(user.uid)
-        .then((complaints) => {
-          setComplaints(complaints);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      const unsubscribe = fetchComplaintsByUser(
+        user.uid,
+        handleComplaintsUpdate
+      );
+
+      return () => {
+        // Unsubscribe from real-time updates when the component is unmounted
+        unsubscribe();
+      };
     });
   }, []);
+  const handleComplaintsUpdate = (updatedComplaints) => {
+    setComplaints(updatedComplaints);
+  };
   return (
     <div className="lg:border lg:shadow-[3px_4px_4px_rgba(0,0,0,0.26)] rounded-lg lg:border-solid lg:border-black w-full flex flex-col items-center lg:h-[28rem] py-2">
       <h3 className="font-bold my-2">Complaints Reported by You</h3>

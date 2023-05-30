@@ -21,21 +21,22 @@ const OfficialDashboard = () => {
       } else {
         isOfficial(user.uid).then((res) => {
           if (!res) {
-            navigate("/citizen-dashboard");
+            auth.signOut()
+            navigate("/citizen-login");
           }
         });
       }
     });
-      const unsubscribe = fetchComplaints(handleComplaintsUpdate);
-  
-      return () => {
-        // Clean up the listener when the component unmounts
-        unsubscribe();
-      };
-    }, []);
-    const handleComplaintsUpdate = (updatedComplaints) => {
-      setComplaints(updatedComplaints);
+    const unsubscribe = fetchComplaints(handleComplaintsUpdate);
+
+    return () => {
+      // Clean up the listener when the component unmounts
+      unsubscribe();
     };
+  }, []);
+  const handleComplaintsUpdate = (updatedComplaints) => {
+    setComplaints(updatedComplaints);
+  };
   let columns = [
     {
       field: "reason",
@@ -91,7 +92,6 @@ const OfficialDashboard = () => {
       },
     },
   ];
-
   return (
     <>
       <Navbar />

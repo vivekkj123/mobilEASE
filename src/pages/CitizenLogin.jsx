@@ -15,7 +15,7 @@ const CitizenLogin = () => {
   const navigate = useNavigate();
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user && !isOfficial(user.uid)) {
+      if (user) {
         return navigate("/citizen-dashboard");
       }
     });

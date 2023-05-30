@@ -40,12 +40,11 @@ const OfficialLogin = () => {
               e.preventDefault();
               handleLogin(FormData)
                 .then(async (user) => {
-                  console.log(user);
-                  if (user.official) {
+                  let officialOrNot = isOfficial(user.uid);
+                  if (officialOrNot) {
                     navigate("/official-dashboard");
                   } else {
-                    await auth.signOut();
-                    throw new Error("Invalid user");
+                    setErr("Invalid user");
                   }
                 })
                 .catch((err) => {
