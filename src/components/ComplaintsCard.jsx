@@ -1,8 +1,8 @@
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Dialog } from "@mui/material";
 import React, { useState } from "react";
 import { Statuses, statusColors } from "../utils/enums";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { Dialog } from "@mui/material";
 import ComplaintDetailModal from "./ComplaintDetailModal";
 
 const ComplaintsCard = ({ complaint }) => {

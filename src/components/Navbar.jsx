@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
-import Logo from "/src/assets/logo.png";
-import MuiButton from "@mui/material/Button";
 import styled from "@emotion/styled";
-import { Link, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import CitizenLogin from "../pages/CitizenLogin";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MuiButton from "@mui/material/Button";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../utils/Firebase";
 import { isOfficial } from "../utils/FirebaseFunctions";
+import Logo from "/src/assets/logo.png";
 
 export const Button = styled(MuiButton)((props) => ({
   borderRadius: "25px",
@@ -45,7 +43,7 @@ const Navbar = () => {
         <Link to="/">
           <div className="LogoGroup flex items-center gap-3">
             <img className="logo h-8 lg:h-12" src={Logo} />
-            <h2 className="font-bold text-sm lg:text-lg">TRAFFIC HERO</h2>
+            <h2 className="font-bold text-sm animate-typing whitespace-nowrap overflow-hidden lg:text-lg">MobilEASE</h2>
           </div>
         </Link>
         {User ? (

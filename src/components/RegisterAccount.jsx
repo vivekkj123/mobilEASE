@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import MuiTextField from "@mui/material/TextField";
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
-import { handleRegistration } from "../utils/FirebaseFunctions";
-import { Navigate } from "react-router-dom";
+import MuiTextField from "@mui/material/TextField";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { handleRegistration } from "../utils/FirebaseFunctions";
 
 export const TextField = styled(MuiTextField)((props) => ({
   width: "100%",

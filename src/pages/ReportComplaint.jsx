@@ -1,26 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../components/Navbar";
-import DashboardLinkButton from "../components/DashboardLinkButton";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import MuiTextField from "@mui/material/TextField";
 import styled from "@emotion/styled";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { LocationSearching } from "@mui/icons-material";
 import {
-  Alert,
   Box,
   Button,
   ButtonBase,
   Checkbox,
   FormControlLabel,
   Radio,
-  RadioGroup,
+  RadioGroup
 } from "@mui/material";
-import { identifyLocation } from "../utils/MiscFunctions";
+import MuiTextField from "@mui/material/TextField";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import DashboardLinkButton from "../components/DashboardLinkButton";
+import Navbar from "../components/Navbar";
+import SpinnerModal from "../components/SpinnerModal";
 import { auth } from "../utils/Firebase";
 import { createComplaint, isOfficial } from "../utils/FirebaseFunctions";
-import { useNavigate } from "react-router-dom";
-import SpinnerModal from "../components/SpinnerModal";
-import { ToastContainer, toast } from "react-toastify";
+import { identifyLocation } from "../utils/MiscFunctions";
 import { Statuses } from "../utils/enums";
 
 const TextField = styled(MuiTextField)((props) => ({

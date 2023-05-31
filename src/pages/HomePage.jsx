@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import Navbar from "/src/components/Navbar";
-import TrafficArt from "/src/assets/traffic-art.png";
+import { useNavigate } from "react-router-dom";
 import RegisterAccount from "../components/RegisterAccount";
 import { auth } from "../utils/Firebase";
-import { useNavigate } from "react-router-dom";
 import { isOfficial } from "../utils/FirebaseFunctions";
+import TrafficArt from "/src/assets/traffic-art.png";
+import Navbar from "/src/components/Navbar";
 const HomePage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user && !isOfficial(user.uid)) {
-        return navigate("/citizen-dashboard");
+        navigate("/citizen-dashboard");
       } else if (user && isOfficial(user.uid)) {
-        return navigate("/official-dashboard");
+        navigate("/official-dashboard");
       }
     });
   }, []);

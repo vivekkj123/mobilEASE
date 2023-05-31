@@ -1,7 +1,7 @@
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { fetchUserById } from "../utils/FirebaseFunctions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 const CommentsTile = ({ comment }) => {
   const [CommentAuthor, setCommentAuthor] = useState("");

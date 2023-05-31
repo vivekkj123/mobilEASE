@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../utils/Firebase";
 import Navbar from "../components/Navbar";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { fetchComplaints, isOfficial } from "../utils/FirebaseFunctions";
 import { Statuses, statusColors } from "../utils/enums";
@@ -21,8 +21,7 @@ const OfficialDashboard = () => {
       } else {
         isOfficial(user.uid).then((res) => {
           if (!res) {
-            auth.signOut()
-            navigate("/citizen-login");
+            navigate("/citizen-dashboard");
           }
         });
       }

@@ -1,10 +1,10 @@
 import { faClockFour } from "@fortawesome/free-regular-svg-icons";
 import {
   faClose,
-  faMapMarkerAlt,
-  faUser,
+  faMapMarkerAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Send } from "@mui/icons-material";
 import {
   Button,
   DialogActions,
@@ -14,16 +14,14 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Statuses, statusColors } from "../utils/enums";
 import { auth } from "../utils/Firebase";
 import {
   addComment,
-  fetchUserById,
   isOfficial,
   markAsRejected,
-  markAsSolved,
+  markAsSolved
 } from "../utils/FirebaseFunctions";
-import { Send } from "@mui/icons-material";
+import { Statuses, statusColors } from "../utils/enums";
 import CommentsTile from "./CommentsTile";
 
 const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {

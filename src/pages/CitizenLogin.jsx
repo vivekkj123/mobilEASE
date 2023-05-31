@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
-import { Button } from "@mui/material";
-import { handleLogin, isOfficial } from "../utils/FirebaseFunctions";
-import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/Firebase";
+import { handleLogin } from "../utils/FirebaseFunctions";
 
 const CitizenLogin = () => {
   const [FormData, setFormData] = useState({

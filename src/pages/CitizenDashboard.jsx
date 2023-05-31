@@ -1,35 +1,53 @@
-import React from "react";
-import { auth } from "../utils/Firebase";
-import { Navigate, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import DashboardLinkButton from "../components/DashboardLinkButton";
 import {
   faEdit,
   faMobileScreen,
   faSignOut,
   faTrafficLight,
 } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DashboardLinkButton from "../components/DashboardLinkButton";
+import Navbar from "../components/Navbar";
 import ReportedComplaints from "../components/ReportedComplaints";
-import { useEffect } from "react";
+import { auth } from "../utils/Firebase";
 import { isOfficial } from "../utils/FirebaseFunctions";
 
 const CitizenDashboard = () => {
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
-        return navigate("/citizen-login");
+        navigate("/citizen-login");
       } else {
         isOfficial(user.uid).then((res) => {
           if (res) {
-            auth.signOut()
-            navigate("/official-login");
+            navigate("/official-dashboard");
           }
         });
       }
     });
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+    };
   }, []);
+  const handleBeforeInstallPrompt = (event) => {
+    event.preventDefault();
+    setDeferredPrompt(event);
+  };
 
+  const handleInstall = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        setDeferredPrompt(null);
+      });
+    }
+  };
   const handleLogout = () => {
     auth.signOut();
     navigate("/");
@@ -58,7 +76,7 @@ const CitizenDashboard = () => {
           <DashboardLinkButton
             icon={faMobileScreen}
             name={"Install as an app (Mobile)"}
-            link={"/report"}
+            onClick={handleInstall}
             className={"lg:hidden"}
           />
           <DashboardLinkButton
