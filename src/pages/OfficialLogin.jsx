@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import { TextField } from "../components/RegisterAccount";
 import { auth } from "../utils/Firebase";
 import { handleLogin, isOfficial } from "../utils/FirebaseFunctions";
+import SpinnerModal from "../components/SpinnerModal";
 
 const OfficialLogin = () => {
   const [FormData, setFormData] = useState({
@@ -13,6 +14,7 @@ const OfficialLogin = () => {
   });
   const navigate = useNavigate();
   const [Err, setErr] = useState("");
+  const [Spinner, setSpinner] = useState(false);
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user && isOfficial(user.uid)) {
@@ -22,6 +24,7 @@ const OfficialLogin = () => {
   }, []);
   return (
     <div className="h-screen overflow-hidden">
+      <SpinnerModal visible={Spinner} />
       <Navbar />
       <div className=" lg:px-96 px-4 h-3/4 flex flex-col justify-center">
         <h2 className="mt-[25%] lg:mt-0 leading-normal font-bold text-center text-base lg:text-[2rem] my-8">
@@ -37,6 +40,7 @@ const OfficialLogin = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              setSpinner(true);
               handleLogin(FormData)
                 .then(async (user) => {
                   let officialOrNot = isOfficial(user.uid);
@@ -50,6 +54,9 @@ const OfficialLogin = () => {
                   err.message.split(": ")[1]
                     ? setErr(err.message.split(": ")[1])
                     : setErr(err.message);
+                })
+                .finally(() => {
+                  setSpinner(false);
                 });
             }}
             className=" flex flex-col gap-5 w-full"

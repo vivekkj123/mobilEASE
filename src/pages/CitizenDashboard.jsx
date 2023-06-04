@@ -5,7 +5,8 @@ import {
   faTrafficLight,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import DashboardLinkButton from "../components/DashboardLinkButton";
 import Navbar from "../components/Navbar";
 import ReportedComplaints from "../components/ReportedComplaints";
@@ -15,6 +16,7 @@ import { isOfficial } from "../utils/FirebaseFunctions";
 const CitizenDashboard = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
@@ -24,6 +26,12 @@ const CitizenDashboard = () => {
           if (res) {
             navigate("/official-dashboard");
           }
+        });
+      }
+
+      if (params.get("newUser")) {
+        toast.success("Registration Succesful, Welcome to citizen dashboard", {
+          icon: "👋",
         });
       }
     });
@@ -56,7 +64,18 @@ const CitizenDashboard = () => {
   return (
     <>
       <Navbar />
-
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <h2 className=" lg:mt-10 leading-normal font-bold text-center text-xl lg:text-[2rem] my-8 lg:text-left lg:mx-20">
         Dashboard
       </h2>

@@ -43,10 +43,12 @@ const RegisterAccount = () => {
         className=" flex flex-col gap-5 w-full"
         onSubmit={(e) => {
           e.preventDefault();
+
           handleRegistration(FormData)
             .then((user) => {
               console.log(user);
-              navigate("/citizen-login");
+
+              navigate("/citizen-dashboard?newUser=true");
             })
             .catch((err) => {
               setErr(err.message.split(": ")[1]);

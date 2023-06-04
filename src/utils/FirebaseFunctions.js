@@ -46,7 +46,7 @@ export const handleRegistration = async (formData) => {
 export const isOfficial = async (userId) => {
   const userDocRef = doc(db, "users", userId);
   const userDocSnapshot = await getDoc(userDocRef);
-  const userData = userDocSnapshot.data();
+  const userData =  userDocSnapshot.data();
   const userType = userData.type;
   if (userType === userTypes.official) {
     return true;
