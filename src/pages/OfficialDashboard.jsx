@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { auth } from "../utils/Firebase";
-import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
+import { Dialog } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import clsx from "clsx";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ComplaintDetailModal from "../components/ComplaintDetailModal";
+import Navbar from "../components/Navbar";
+import SpinnerModal from "../components/SpinnerModal";
+import { auth } from "../utils/Firebase";
 import { fetchComplaints, isOfficial } from "../utils/FirebaseFunctions";
 import { Statuses, statusColors } from "../utils/enums";
-import clsx from "clsx";
-import { Dialog } from "@mui/material";
-import ComplaintDetailModal from "../components/ComplaintDetailModal";
 
 const OfficialDashboard = () => {
   const [Complaints, setComplaints] = useState([]);
   const [ModalOpen, setModalOpen] = useState(false);
   const [complaint, setComplaint] = useState({});
+  const [SpinnerVisible, setSpinnerVisible] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
+    setSpinnerVisible(true);
     auth.onAuthStateChanged((user) => {
       if (!user) {
         navigate("/official-login");
@@ -22,6 +25,8 @@ const OfficialDashboard = () => {
         isOfficial(user.uid).then((res) => {
           if (!res) {
             navigate("/citizen-dashboard");
+          } else {
+            setSpinnerVisible(false);
           }
         });
       }
@@ -93,6 +98,7 @@ const OfficialDashboard = () => {
   ];
   return (
     <>
+      <SpinnerModal visible={SpinnerVisible} />
       <Navbar />
       <div className="px-20 ">
         <h2 className=" lg:mt-10 leading-normal font-bold text-center text-xl lg:text-[2rem] my-8 lg:text-left">

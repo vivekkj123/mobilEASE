@@ -10,14 +10,17 @@ import { ToastContainer, toast } from "react-toastify";
 import DashboardLinkButton from "../components/DashboardLinkButton";
 import Navbar from "../components/Navbar";
 import ReportedComplaints from "../components/ReportedComplaints";
+import SpinnerModal from "../components/SpinnerModal";
 import { auth } from "../utils/Firebase";
 import { isOfficial } from "../utils/FirebaseFunctions";
 
 const CitizenDashboard = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [SpinnerVisible, setSpinnerVisible] = useState(false);
   const navigate = useNavigate();
   const [params] = useSearchParams();
   useEffect(() => {
+    setSpinnerVisible(true);
     auth.onAuthStateChanged((user) => {
       if (!user) {
         navigate("/citizen-login");
@@ -25,6 +28,8 @@ const CitizenDashboard = () => {
         isOfficial(user.uid).then((res) => {
           if (res) {
             navigate("/official-dashboard");
+          } else {
+            setSpinnerVisible(false);
           }
         });
       }
@@ -63,6 +68,8 @@ const CitizenDashboard = () => {
 
   return (
     <>
+      <SpinnerModal visible={SpinnerVisible} />
+
       <Navbar />
       <ToastContainer
         position="bottom-center"
