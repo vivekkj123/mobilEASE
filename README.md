@@ -1,6 +1,7 @@
 # MobilEASE
 
-![logo](./src/assets/logo.png)
+<img src="./public/logo.png" alt="logo" width=200 height=200>
+
 
 > A Web-Based Traffic Complaint System that can be used by citizens for reporting various traffic and civic issues.
 
