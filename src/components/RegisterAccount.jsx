@@ -23,7 +23,7 @@ const RegisterAccount = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (FormData.password != FormData.confirmPassword) {
-      setErr("The password and confirmation password do not match.");
+      setErr("A senha e a confirmação não coincidem.");
     } else {
       setErr(null);
     }
@@ -36,7 +36,7 @@ const RegisterAccount = () => {
     "
     >
       <p className="Slogan text-sm lg:text-xl text-center">
-        Register a account to be a <b>HERO</b>
+        Registre um conta como <b>CIDADÃO</b>
       </p>
       <form
         action=""
@@ -57,7 +57,7 @@ const RegisterAccount = () => {
       >
         <TextField
           variant="outlined"
-          label="Full Name"
+          label="Nome completo"
           required
           value={FormData.name}
           onChange={(e) => setFormData({ ...FormData, name: e.target.value })}
@@ -72,7 +72,7 @@ const RegisterAccount = () => {
         />
         <TextField
           variant="outlined"
-          label="Phone No."
+          label="Telefone"
           type="tel"
           required
           value={FormData.mobile}
@@ -80,7 +80,7 @@ const RegisterAccount = () => {
         />
         <TextField
           variant="outlined"
-          label="Password"
+          label="Senha"
           type="password"
           required
           value={FormData.password}
@@ -90,7 +90,7 @@ const RegisterAccount = () => {
         />
         <TextField
           variant="outlined"
-          label="Confirm Password"
+          label="Confirme a senha"
           type="password"
           required
           value={FormData.confirmPassword}
@@ -100,7 +100,7 @@ const RegisterAccount = () => {
         />
         <p className="text-red-600">{Err}</p>
         <Button variant="contained" type="submit">
-          REGISTER
+          REGISTRAR
         </Button>
       </form>
     </div>

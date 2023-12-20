@@ -9,7 +9,7 @@ const SpinnerModal = ({ visible }) => {
       }`}
     >
       <RotateLoader color="#fef303" />
-      <p className="text-white font-extrabold mt-20 text-xl">Please Wait</p>
+      <p className="text-white font-extrabold mt-20 text-xl">Aguarde ...</p>
       <img
       className="absolute bottom-0 w-auto lg:h-40 h-20"
       src={spinnerBottomImage} alt="" srcset="" />

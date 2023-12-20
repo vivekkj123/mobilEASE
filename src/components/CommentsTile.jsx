@@ -10,7 +10,7 @@ const CommentsTile = ({ comment }) => {
   });
   let TimeStamp = new Date(comment.timestamp);
   let date = TimeStamp.toLocaleDateString();
-  let time = TimeStamp.toLocaleTimeString("en-US", {
+  let time = TimeStamp.toLocaleTimeString("pt-BR", {
     hour: "numeric",
     minute: "numeric",
     hour12: true,

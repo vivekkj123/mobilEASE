@@ -28,14 +28,14 @@ const ComplaintsCard = ({ complaint }) => {
   "
       >
         <div className="flex justify-between">
-          <p>Reported Date : {date.toLocaleDateString("en-IN")}</p>
+          <p>Data de criação : {date.toLocaleDateString("en-IN")}</p>
           <p
             className="cursor-pointer text-sm font-semibold"
             onClick={() => {
               setDialogOpen(true);
             }}
           >
-            Detailed View
+            Visão detalhada
           </p>
         </div>
         <p className="font-bold">{complaint.reason}</p>

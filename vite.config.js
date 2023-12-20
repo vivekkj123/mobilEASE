@@ -1,6 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+//import basicSsl from '@vitejs/plugin-basic-ssl'
+import fs from 'fs';
+
 
 // https://vitejs.dev/config/
 const manifestForPlugin = {
@@ -18,9 +21,9 @@ const manifestForPlugin = {
     "maskable_icon.png",
   ],
   manifest: {
-    name: "MobilEASE - Mobile Efficient Assistance for Traffic",
-    short_name: "MobilEASE",
-    description: "Application to report traffic issues around you",
+    name: "FalaGOV - Aplicativo de Ouvidoria Governamental",
+    short_name: "FalaGOV",
+    description: "Aplicativo para fazer solicitações/reclamações para o Governo",
     icons: [
       {
         src: "/logo.png",
@@ -82,5 +85,11 @@ const manifestForPlugin = {
   },
 };
 export default defineConfig({
+server: {
+    https: {
+      key: fs.readFileSync('/etc/letsencrypt/live/neogov.com.br/privkey.pem'),
+      cert: fs.readFileSync('/etc/letsencrypt/live/neogov.com.br/cert.pem'),
+    },
+  },
   plugins: [react(), VitePWA(manifestForPlugin)],
 });

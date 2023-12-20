@@ -43,7 +43,6 @@ const Navbar = () => {
         <Link to="/">
           <div className="LogoGroup flex items-center gap-3">
             <img className="logo h-8 lg:h-12" src={Logo} />
-            <h2 className="font-bold text-sm animate-typing whitespace-nowrap overflow-hidden lg:text-lg">MobilEASE</h2>
           </div>
         </Link>
         {User ? (
@@ -53,19 +52,19 @@ const Navbar = () => {
               to={Official ? "/official-dashboard" : "/citizen-dashboard"}
               variant="outlined"
             >
-              Dashboard
+              Painel
             </Button>
             <Button onClick={handleLogout} variant="outlined">
-              Logout
+              Sair
             </Button>
           </div>
         ) : (
           <div className="ButtonGroup gap-8 hidden lg:flex">
             <Button component={Link} to={"/official-login"} variant="outlined">
-              Official Login
+              Login do Gestor
             </Button>
             <Button component={Link} to={"/citizen-login"} variant="outlined">
-              Citizen Login
+              Login do Cidadão
             </Button>
           </div>
         )}
@@ -89,14 +88,14 @@ const Navbar = () => {
               <Link
                 to={Official ? "/official-dashboard" : "/citizen-dashboard"}
               >
-                Dashboard
+                Painel
               </Link>
               <Link onClick={handleLogout}>Logout</Link>{" "}
             </>
           ) : (
             <>
-              <Link to={"/citizen-login"}>Citizen Login</Link>
-              <Link to={"/official-login"}>Official Login</Link>
+              <Link to={"/citizen-login"}>Login do Cidadão</Link>
+              <Link to={"/official-login"}>Login do Gestor</Link>
             </>
           )}
         </ul>

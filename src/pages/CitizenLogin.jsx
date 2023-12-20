@@ -27,7 +27,7 @@ const CitizenLogin = () => {
       <Navbar />
       <div className=" lg:px-96 px-4 h-3/4 flex flex-col justify-center">
         <h2 className="mt-[25%] lg:mt-0 leading-normal font-bold text-center text-base lg:text-[2rem] my-8">
-          Citizen Login
+          Login do Cidadão
         </h2>
         <div
           className="LoginBox flex flex-col gap-5 items-center 
@@ -47,7 +47,7 @@ const CitizenLogin = () => {
                     navigate("/citizen-dashboard");
                   } else {
                     await auth.signOut();
-                    throw new Error("Invalid user");
+                    throw new Error("Usuário inválido");
                   }
                 })
                 .catch((err) => {
@@ -72,7 +72,7 @@ const CitizenLogin = () => {
             />
             <TextField
               variant="outlined"
-              label="Password"
+              label="Senha"
               type="password"
               onChange={(e) =>
                 setFormData({ ...FormData, password: e.target.value })

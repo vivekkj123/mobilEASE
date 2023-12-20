@@ -35,7 +35,7 @@ const CitizenDashboard = () => {
       }
 
       if (params.get("newUser")) {
-        toast.success("Registration Succesful, Welcome to citizen dashboard", {
+        toast.success("Conta criada, bem vindo ao painel do Cidadão", {
           icon: "👋",
         });
       }
@@ -84,30 +84,30 @@ const CitizenDashboard = () => {
         theme="light"
       />
       <h2 className=" lg:mt-10 leading-normal font-bold text-center text-xl lg:text-[2rem] my-8 lg:text-left lg:mx-20">
-        Dashboard
+        Painel
       </h2>
       <div className="grid lg:grid-cols-[0.8fr_0.6fr] mx-10">
         <div>
           <DashboardLinkButton
             icon={faEdit}
-            name={"New Complaint"}
+            name={"Novo registro"}
             link={"/report"}
           />
           <DashboardLinkButton
             icon={faTrafficLight}
-            name={"Track Reported complaints"}
+            name={"Rastrear registros"}
             link={"/track-complaints"}
             className={"lg:hidden"}
           />
           <DashboardLinkButton
             icon={faMobileScreen}
-            name={"Install as an app (Mobile)"}
+            name={"Instalar como app (Móvel)"}
             onClick={handleInstall}
             className={"lg:hidden"}
           />
           <DashboardLinkButton
             icon={faSignOut}
-            name={"Logout"}
+            name={"Sair"}
             onClick={handleLogout}
             className={"lg:hidden"}
           />

@@ -28,10 +28,10 @@ const ReportedComplaints = () => {
   };
   return (
     <div className="lg:border lg:shadow-[3px_4px_4px_rgba(0,0,0,0.26)] rounded-lg lg:border-solid lg:border-black w-full flex flex-col items-center lg:h-[28rem] py-2">
-      <h3 className="font-bold my-2">Complaints Reported by You</h3>
+      <h3 className="font-bold my-2">Registros feitos por você</h3>
       <div className="container px-4 overflow-y-auto">
         {Complaints.length === 0 ? (
-          <h2>No Complaints Found</h2>
+          <h2>Nenhum registro encontrado.</h2>
         ) : (
           Complaints &&
           Complaints.map((complaint) => {

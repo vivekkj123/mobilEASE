@@ -44,25 +44,25 @@ const OfficialDashboard = () => {
   let columns = [
     {
       field: "reason",
-      headerName: "Complaint Reason",
+      headerName: "Motivo do registro",
       width: 300,
       headerClassName: "",
     },
     {
       field: "author",
-      headerName: "Reported By",
+      headerName: "Criado por",
       width: 150,
     },
     {
       field: "location",
-      headerName: "Reported Location",
+      headerName: "Localização do registro",
       width: 200,
 
       valueGetter: (params) => `${params.row.location.name}`,
     },
     {
       field: "timestamp",
-      headerName: "Reported Date & Time",
+      headerName: "Data e Hora do Registro",
       width: 200,
 
       valueGetter: (params) => {
@@ -78,7 +78,7 @@ const OfficialDashboard = () => {
     },
     {
       field: "status",
-      headerName: "Status",
+      headerName: "Situação",
       width: 150,
       headerClassName: "",
       headerAlign: "center",
@@ -102,7 +102,7 @@ const OfficialDashboard = () => {
       <Navbar />
       <div className="px-20 ">
         <h2 className=" lg:mt-10 leading-normal font-bold text-center text-xl lg:text-[2rem] my-8 lg:text-left">
-          Official Dashboard
+          Painel do Gestor
         </h2>
         <Dialog
           open={ModalOpen}

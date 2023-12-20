@@ -37,7 +37,7 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
   }, []);
   let TimeStamp = new Date(complaint.timestamp);
   let date = TimeStamp.toLocaleDateString();
-  let time = TimeStamp.toLocaleTimeString("en-US", {
+  let time = TimeStamp.toLocaleTimeString("pt-BR", {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
@@ -97,7 +97,7 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
           <h2 className="text-lg font-bold my-4">Comments</h2>
           <div>
             {complaint.comments && complaint.comments.length === 0 ? (
-              <p className="text-center">No Comments</p>
+              <p className="text-center">Sem comentários</p>
             ) : (
               complaint.comments.map((comment) => (
                 <CommentsTile key={comment.id} comment={comment} />
@@ -121,7 +121,7 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
                 }
               }}
               variant="outlined"
-              label="Add your comment"
+              label="Comente"
             />
             <IconButton
               className="h-10 w-10 shadow-xl border rounded-full flex items-center justify-center"
@@ -147,7 +147,7 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
                 setDialogOpen(false);
               }}
             >
-              Mark as Rejected
+              Marcar como Não Resolvido
             </Button>
             <Button
               onClick={async () => {
@@ -157,7 +157,7 @@ const ComplaintDetailModal = ({ setDialogOpen, complaint }) => {
               color="success"
               variant="contained"
             >
-              Mark as Solved
+              Marcar como Resolvido
             </Button>
           </>
         ) : null}

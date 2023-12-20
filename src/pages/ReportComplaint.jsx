@@ -73,7 +73,7 @@ const ReportComplaint = () => {
         theme="light"
       />
       <h2 className=" lg:mt-10 leading-normal font-bold text-center text-xl lg:text-[2rem] my-6 lg:text-left lg:mx-20">
-        Report a Complaint
+        Criar um registro
       </h2>
 
       <form
@@ -82,7 +82,7 @@ const ReportComplaint = () => {
           setLoaderVisibile(true);
           createComplaint(FormData, Media)
             .then(() => {
-              toast.success("Complaint Reported Succesfully");
+              toast.success("Registro criado com sucesso!");
               setTimeout(() => {
                 navigate("/citizen-dashboard");
               }, 3000);
@@ -115,9 +115,9 @@ const ReportComplaint = () => {
         <DashboardLinkButton
           className={`${Media ? "hidden" : "block"} mx-[8vw]` }
           icon={faCamera}
-          name={"Upload a picture/video of incident"}
+          name={"Envie uma foto/vídeo sobre o assunto"}
           onClick={() => FileInput.current.click()}
-          subtitle={"Make sure that everything is clear"}
+          subtitle={"Confirme que tudo está claro"}
         />
         <div
           className={`flex flex-col justify-center items-center mx-8 lg:mx-20 py-6 ${
@@ -143,13 +143,13 @@ const ReportComplaint = () => {
             hidden={Media ? false : true}
             variant="outlined"
           >
-            Change Image
+            Mudar imagem
           </Button>
         </div>
         <Box ml={'8vw'}>
           <TextField
             variant="outlined"
-            label="Location"
+            label="Localização"
             value={FormData.location.name}
             required
             contentEditable={false}
@@ -166,7 +166,7 @@ const ReportComplaint = () => {
               ),
             }}
           />
-          <p className="mt-6">Reason:</p>
+          <p className="mt-6">Assunto:</p>
           <RadioGroup
             onChange={(e) => {
               setFormData({ ...FormData, reason: e.target.value });
@@ -176,40 +176,40 @@ const ReportComplaint = () => {
             <FormControlLabel
               value="Speeding/Racing"
               control={<Radio />}
-              label="Speeding/Racing"
+              label="Reclamação"
             />
             <FormControlLabel
               value="Overloading of Passengers"
               control={<Radio />}
-              label="Overloading of Passengers"
+              label="Elogio"
             />
             <FormControlLabel
               value="Driving without seat belt/Helmet"
               control={<Radio />}
-              label="Driving without seat belt/Helmet"
+              label="Dúvida"
             />
             <FormControlLabel
               value="Illegal Overtaking"
               control={<Radio />}
-              label="Illegal Overtaking"
+              label="Solicitação"
             />
             <FormControlLabel
               value="Potholes in Roads"
               control={<Radio />}
-              label="Potholes in Roads"
+              label="Crítica"
             />
             <FormControlLabel
               value="Pavement Defects"
               control={<Radio />}
-              label="Pavement Defects"
+              label="Sugestão"
             />
             <FormControlLabel
               value="Others"
               control={<Radio />}
-              label="Others"
+              label="Outros"
             />
           </RadioGroup>
-          <p className="my-2">More Information</p>
+          <p className="my-2">Mais informação</p>
           <TextField
             required
             multiline
@@ -218,18 +218,18 @@ const ReportComplaint = () => {
               setFormData({ ...FormData, additionalInfo: e.target.value });
             }}
             rows={5}
-            placeholder="Provide more information about the incident"
+            placeholder="Forneça mais informação sobre o registro"
           />
           <FormControlLabel
             required
             value="terms-accepted"
             control={<Checkbox />}
-            label="By clicking this checkbox, I understood that reporting fake complaints against anyone will lead to legal actions against me."
+            label="Marcando esta caixa, Eu compreendo que fazer denúncias falsas resultarão em responsabilização criminal."
           />
         </Box>
         <div className="flex justify-center my-8 px-40 lg:px-96">
           <Button variant="contained" fullWidth type="submit">
-            Submit
+            Enviar
           </Button>
         </div>
       </form>
