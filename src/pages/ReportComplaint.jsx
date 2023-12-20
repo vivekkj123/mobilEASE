@@ -174,37 +174,37 @@ const ReportComplaint = () => {
             value={FormData.reason}
           >
             <FormControlLabel
-              value="Speeding/Racing"
+              value="Reclamação"
               control={<Radio />}
               label="Reclamação"
             />
             <FormControlLabel
-              value="Overloading of Passengers"
+              value="Elogio"
               control={<Radio />}
               label="Elogio"
             />
             <FormControlLabel
-              value="Driving without seat belt/Helmet"
+              value="Dúvida"
               control={<Radio />}
               label="Dúvida"
             />
             <FormControlLabel
-              value="Illegal Overtaking"
+              value="Solicitação"
               control={<Radio />}
               label="Solicitação"
             />
             <FormControlLabel
-              value="Potholes in Roads"
+              value="Crítica"
               control={<Radio />}
               label="Crítica"
             />
             <FormControlLabel
-              value="Pavement Defects"
+              value="Sugestão"
               control={<Radio />}
               label="Sugestão"
             />
             <FormControlLabel
-              value="Others"
+              value="Outros"
               control={<Radio />}
               label="Outros"
             />
