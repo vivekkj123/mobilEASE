@@ -17,6 +17,7 @@ export const Button = styled(MuiButton)((props) => ({
     borderColor: "#080",
   },
 }));
+
 const Navbar = () => {
   const [Visible, setVisible] = useState(false);
   const [User, setUser] = useState(null);
@@ -27,6 +28,7 @@ const Navbar = () => {
     setUser(null);
     navigate("/");
   };
+
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -37,13 +39,14 @@ const Navbar = () => {
       }
     });
   }, []);
+
   return (
     <>
-      <div className="Navbar w-screen flex justify-between items-center px-4 py-2 lg:py-4 lg:px-8">
+      <div className="Navbar w-screen flex justify-between items-center px-4 py-2 lg:py-4 lg:px-8 mt-2">
         <Link to="/">
-          <div className="LogoGroup flex items-center gap-3">
-            <img className="logo h-8 lg:h-12" src={Logo} />
-          </div>
+          <Button component={Link} to="/" variant="outlined">
+            Início
+          </Button>
         </Link>
         {User ? (
           <div className="ButtonGroup gap-8 hidden lg:flex">
@@ -80,7 +83,7 @@ const Navbar = () => {
       <div
         className={`MenuMobile lg:hidden w-full text-center py-20 absolute bg-white z-10 rounded-3xl ${
           Visible ? "block" : "hidden"
-        }`}
+        } mt-2`}
       >
         <ul className=" flex flex-col gap-16 font-bold">
           {User ? (
