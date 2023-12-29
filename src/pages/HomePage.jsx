@@ -29,23 +29,27 @@ const HomePage = () => {
   return (
     <div className="HomePage">
       <Navbar />
-      <div className="HomeContainer grid grid-cols-1 lg:grid-cols-5 items-center px-5 lg:px-20 gap-1">
+      <div className="HomeContainer grid grid-cols-1 lg:grid-cols-5 items-center px-1 lg:px-20 gap-1">
         {/* Adicione a imagem da logo aqui */}
-        <img className="logo h-50 lg:h-63 w-72" src={Logo} alt="Logo" />
+        <div className="flex items-center justify-center lg:col-span-1">
+          <img className="logo max-w-[230px] max-h-[180px] h-50 lg:h-63 w-72 mx-auto" src={Logo} alt="Logo" />
+        </div>
 
         {/* Imagem TrafficArt */}
-        <img
-          className="TrafficArt hidden lg:block w-1/1 ml-1"
-          src={TrafficArt}
-          alt="Traffic Art"
-        />
+        <div className="lg:col-span-1">
+          <img
+            className="TrafficArt w-full lg:w-auto mx-auto max-w-[250px] max-h-[150px] mt-90" // Removi a margem superior
+            src={TrafficArt}
+            alt="Traffic Art"
+          />
+        </div>
 
-        {/* Conteúdo do lado das imagens */}
-        <div className="lg:col-span-3"> {/* Ajuste o número conforme necessário */}
-          <h3 className="slogan lg:mt-9 leading-normal font-bold text-center text-base lg:text-[2rem]">
+        {/* Register Account */}
+        <div className="lg:col-span-3 mt-8"> {/* Ajuste o número conforme necessário */}
+          <h3 className="slogan lg:mt-2 leading-normal font-bold text-center text-base lg:text-[2rem]">
             ESTAMOS AQUI PARA TE OUVIR
           </h3>
-          <RegisterAccount />
+          <RegisterAccount className="lg:w-full mx-auto" /> {/* Adicione a classe lg:w-full e mx-auto para ocupar toda a largura e centralizar em telas grandes */}
         </div>
 
         {/* Adicione outros elementos aqui, se necessário */}
